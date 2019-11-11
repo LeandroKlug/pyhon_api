@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/style.css">
+  <title>Document</title>
+</head>
+
+<body>
+    <a class="d-inline" href="/">Início</a>
+    <a class="d-inline" href="/produto/criar/">Cadastrar</a>
+  <table class="mx-auto">
+    <thead>
+      <th>Nome</th>
+      <th>Descrição</th>
+      <th>Valor</th>
+      <th>Editar</th>
+      <th>Excluir</th>
+    </thead>
+    <tbody>
+      {% for item in response %}
+      <tr>
+        <td>{{item.produto_nome}}</td>
+        <td>{{item.produto_descricao}}</td>
+        <td>R$ {{item.produto_valor}}</td>
+        <td><a href="/produto/editar/{{item.id}}/">Editar</a></td>
+        <td><a href="/produto/excluir/{{item.id}}/"> Excluir</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>
