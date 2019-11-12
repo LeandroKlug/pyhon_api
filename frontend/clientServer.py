@@ -78,15 +78,13 @@ def produto_editar(produto_id):
         )
         return redirect(url_for("produto"))
 
-@app.route("/produto/excluir/<produto_id>", methods=['DELETE'])
+@app.route("/produto/excluir/<produto_id>/", methods=['GET'])
 def produto_excluir(produto_id):
 
-    response = requests.get('http://localhost:5000/produto/excluir/' + produto_id + '/')
-    produto = json.loads(response.text)
-    produto.remove()
-    print(produto)
+    requests.delete('http://localhost:5000/produto/excluir/' + produto_id + '/')
+   
     # produto = request.args.get('produto')
     # exclui um produto
-    return jsonify('produto_listar')
+    return redirect('produto')
 
 app.run(debug=True, port=4999)

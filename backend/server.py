@@ -56,24 +56,11 @@ def produto_editar(produto_id):
         q.execute() 
     return None
 
-@app.route("/produto/excluir/", methods=['DELETE'])
+@app.route("/produto/excluir/<produto_id>/", methods=['DELETE'])
 def produto_excluir(produto_id):
-    Produto.delete().where(Produto.id == produto_id).dicts()
+    Produto.delete_by_id(produto_id)
     
-    info_frontend = request.get_json()
-    q = (Produto
-        .delete(
-            {
-                Produto.produto_nome: info_frontend['produto_nome'],
-                Produto.produto_descricao: info_frontend['produto_descricao'],
-                Produto.produto_valor: info_frontend['produto_valor'],
-            }
-        )
-        .where(Produto.id == produto_id))
-    q.execute()
-
     return None
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
