@@ -1,19 +1,24 @@
 from flask import Flask, request, jsonify
-from model import Pessoa, Produto
+from model import Cliente, Produto, Pedido
 from playhouse.shortcuts import model_to_dict
+
+
+ #####     ##     ####   #    #      ######  #    #  #####  
+ #    #   #  #   #    #  #   #       #       ##   #  #    # 
+ #####   #    #  #       ####        #####   # #  #  #    # 
+ #    #  ######  #       #  #        #       #  # #  #    # 
+ #    #  #    #  #    #  #   #       #       #   ##  #    # 
+ #####   #    #   ####   #    #      ######  #    #  #####  
 
 app = Flask(__name__)
 
-@app.route("/")
-def inicio():
-    return "backend do sistema de pessoas; <a href=/listar_pessoas>API listar pessoas</a>"
 
-@app.route("/listar_pessoas")
-def listar_pessoas():
-    # forma alternativa rápida: usando map (lambda)
-    pessoas = list(map(model_to_dict, Pessoa.select()))
-    return jsonify({'lista':pessoas}) # referência: https://www.geeksforgeeks.org/python-map-function/
-
+ #####   #####    ####   #####   #    #  #####   ####  
+ #    #  #    #  #    #  #    #  #    #    #    #    # 
+ #    #  #    #  #    #  #    #  #    #    #    #    # 
+ #####   #####   #    #  #    #  #    #    #    #    # 
+ #       #   #   #    #  #    #  #    #    #    #    # 
+ #       #    #   ####   #####    ####     #     ####  
 
 @app.route("/produto/", methods=['GET', 'POST'])
 def produto():
@@ -61,6 +66,110 @@ def produto_excluir(produto_id):
     Produto.delete_by_id(produto_id)
     
     return None
+
+                                                                                                      
+#####   ######  #####   #  #####    ####  
+#    #  #       #    #  #  #    #  #    # 
+#    #  #####   #    #  #  #    #  #    # 
+#####   #       #    #  #  #    #  #    # 
+#       #       #    #  #  #    #  #    # 
+#       ######  #####   #  #####    ####  
+
+
+@app.route("/pedido/", methods=['GET', 'POST'])
+def pedido():
+    query = Pedido.select().dicts()
+    itens = []
+    for item in query:
+        itens.append(item)
+
+    return jsonify(itens)
+
+@app.route("/pedido/criar/", methods=['GET', 'POST'])
+def pedido_criar():
+    Pedido.create(**request.get_json()).save()
+
+    return None
+
+@app.route("/pedido/editar/<pedido_id>/", methods=['GET', 'POST'])
+def pedido_editar(pedido_id):
+    if request.method == 'GET':
+        query = Pedido.select().where(Pedido.id == pedido_id).dicts()
+        itens = []
+        for item in query:
+            itens.append(item)
+
+        print(itens)
+
+        return jsonify(itens)
+
+    else:
+        info_frontend = request.get_json()
+        q = (Pedido
+            .update(
+                {
+                    Pedido.cliente_nome: info_frontend['cliente_nome'],
+                    Pedido.produto_nome: info_frontend['produto_nome'],
+                }
+            )
+            .where(Pedido.id == pedido_id))
+        q.execute() 
+    return None
+
+@app.route("/pedido/excluir/<pedido_id>/", methods=['DELETE'])
+def pedido_excluir(pedido_id):
+    Pedido.delete_by_id(pedido_id)
+    
+    return None
+
+
+@app.route("/cliente/", methods=['GET', 'POST'])
+def cliente():
+    query = Cliente.select().dicts()
+    itens = []
+    for item in query:
+        itens.append(item)
+
+    return jsonify(itens)
+
+@app.route("/cliente/criar/", methods=['GET', 'POST'])
+def cliente_criar():
+    Cliente.create(**request.get_json()).save()
+
+    return None
+
+@app.route("/cliente/editar/<cliente_id>/", methods=['GET', 'POST'])
+def cliente_editar(cliente_id):
+    if request.method == 'GET':
+        query = Cliente.select().where(Cliente.id == cliente_id).dicts()
+        itens = []
+        for item in query:
+            itens.append(item)
+
+        print(itens)
+
+        return jsonify(itens)
+
+    else:
+        info_frontend = request.get_json()
+        q = (Cliente
+            .update(
+                {
+                    Cliente.cliente_id: info_frontend['cliente_nome'],
+                    Cliente.cliente_descricao: info_frontend['cliente_endereco'],
+                    Cliente.cliente_valor: info_frontend['cliente_telefone'],
+                }
+            )
+            .where(Cliente.id == cliente_id))
+        q.execute() 
+    return None
+
+@app.route("/cliente/excluir/<cliente_id>/", methods=['DELETE'])
+def cliente_excluir(cliente_id):
+    Cliente.delete_by_id(cliente_id)
+    
+    return None  
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

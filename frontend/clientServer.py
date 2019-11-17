@@ -1,40 +1,31 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for
-from model import Pessoa
 import requests
 from playhouse.shortcuts import dict_to_model
 import json
-# https://www.twilio.com/blog/2016/12/http-requests-in-python-3.html
-# pip3 install requests
-# necessário para fazer chamadas get no python: acessar o backend
 
+
+######  #####    ####   #    #  #####      ######  #    #  #####  
+#       #    #  #    #  ##   #    #        #       ##   #  #    # 
+#####   #    #  #    #  # #  #    #        #####   # #  #  #    # 
+#       #####   #    #  #  # #    #        #       #  # #  #    # 
+#       #   #   #    #  #   ##    #        #       #   ##  #    # 
+#       #    #   ####   #    #    #        ######  #    #  #####  
+                                                                    
 app = Flask(__name__)
-
-lista_produtos = []
 
 @app.route("/")
 def inicio():
     return render_template('index.html')
 
-@app.route("/listar_pessoas")
-def listar_pessoas():
-    # obter do backend a lista de pessoas
-    dados_pessoas = requests.get('http://localhost:4999/listar_pessoas')
-    # converter os dados recebidos para o formato json
-    json_pessoas = dados_pessoas.json()
-    # inicializar a lista de pessoas
-    pessoas = []
-    # percorrer as pessoas em json
-    for pessoa_em_json in json_pessoas['lista']:
-        
-        # http://docs.peewee-orm.com/en/latest/peewee/playhouse.html#dict_to_model
-        # converter a pessoa em json para pessoa do peewee
-        p = dict_to_model(Pessoa, pessoa_em_json)
-        # adicionar a pessoa convertida na lista de pessoas
-        pessoas.append(p)
-    
-    # fornecer a lista de pessoas para a página exibir as pessoas
-    return render_template("produto_listar.html", lista = pessoas)
 
+ #####   #####    ####   #####   #    #  #####   ####  
+ #    #  #    #  #    #  #    #  #    #    #    #    # 
+ #    #  #    #  #    #  #    #  #    #    #    #    # 
+ #####   #####   #    #  #    #  #    #    #    #    # 
+ #       #   #   #    #  #    #  #    #    #    #    # 
+ #       #    #   ####   #####    ####     #     ####  
+
+lista_produtos = []
 
 @app.route("/produto/", methods=['GET'])
 def produto():
@@ -86,5 +77,126 @@ def produto_excluir(produto_id):
     # produto = request.args.get('produto')
     # exclui um produto
     return redirect('produto')
+
+                                                    
+  ####   #       #  ######  #    #  #####  ###### 
+ #    #  #       #  #       ##   #    #    #      
+ #       #       #  #####   # #  #    #    #####  
+ #       #       #  #       #  # #    #    #      
+ #    #  #       #  #       #   ##    #    #      
+  ####   ######  #  ######  #    #    #    ###### 
+
+lista_clientes = []
+
+@app.route("/cliente/", methods=['GET'])
+def cliente():
+    response = requests.get('http://localhost:5000/cliente/')      
+    lista_clientes = json.loads(response.text)
+    return render_template("cliente_listar.html", response = lista_clientes)
+
+@app.route("/cliente/criar/", methods=['GET', 'POST'])
+def cliente_criar():
+    # cria um novo cliente
+    # cliente = request.args.post('cliente')
+    if request.method == 'GET':
+        return render_template("cliente_criar.html")
+    else:
+        requests.post(
+            'http://localhost:5000/cliente/criar/', 
+            json = 
+                {
+                    'cliente_nome':request.form.get('cliente_nome'),
+                    'cliente_endereco':request.form.get('cliente_endereco'),
+                    'cliente_telefone':request.form.get('cliente_telefone'),
+                }            
+        )
+        return redirect(url_for("cliente"))
+
+@app.route("/cliente/editar/<cliente_id>/", methods=['GET', 'POST'])
+def cliente_editar(cliente_id):
+    if request.method == 'GET':
+        response = requests.get('http://localhost:5000/cliente/editar/' + cliente_id + '/')
+        cliente = json.loads(response.text)
+        return render_template("cliente_editar.html", cliente = cliente[0])
+    else:
+        requests.post(
+            'http://localhost:5000/cliente/editar/' + cliente_id +'/', 
+            json = 
+                {
+                    'cliente_nome':request.form.get('cliente_nome'),
+                    'cliente_endereco':request.form.get('cliente_endereco'),
+                    'cliente_telefone':request.form.get('cliente_telefone'),
+                }            
+        )
+        return redirect(url_for("cliente"))
+
+@app.route("/cliente/excluir/<cliente_id>/", methods=['GET'])
+def cliente_excluir(cliente_id):
+
+    requests.delete('http://localhost:5000/cliente/excluir/' + cliente_id + '/')
+   
+    # cliente = request.args.get('cliente')
+    # exclui um cliente
+    return redirect('cliente')
+
+
+#####   ######  #####   #  #####    ####  
+#    #  #       #    #  #  #    #  #    # 
+#    #  #####   #    #  #  #    #  #    # 
+#####   #       #    #  #  #    #  #    # 
+#       #       #    #  #  #    #  #    # 
+#       ######  #####   #  #####    #### 
+
+lista_pedidos = []
+
+@app.route("/pedidos/", methods=['GET'])
+def pedido():
+    response = requests.get('http://localhost:5000/pedido/')      
+    lista_pedidos = json.loads(response.text)
+    return render_template("pedido_listar.html", response = lista_pedidos)
+
+@app.route("/pedido/criar/", methods=['GET', 'POST'])
+def pedido_criar():
+    # cria um novo pedido
+    # pedido = request.args.post('pedido')
+    if request.method == 'GET':
+        return render_template("pedido_criar.html")
+    else:
+        requests.post(
+            'http://localhost:5000/pedido/criar/', 
+            json = 
+                {
+                    'cliente_nome':request.form.get('cliente_nome'),
+                    'produto_nome':request.form.get('produto_nome'),
+                }            
+        )
+        return redirect(url_for("pedidos"))
+
+@app.route("/pedido/editar/<pedido_id>/", methods=['GET', 'POST'])
+def pedido_editar(pedido_id):
+    if request.method == 'GET':
+        response = requests.get('http://localhost:5000/pedido/editar/' + pedido_id + '/')
+        pedido = json.loads(response.text)
+        return render_template("pedido_editar.html", pedido = pedido[0])
+    else:
+        requests.post(
+            'http://localhost:5000/pedido/editar/' + pedido_id +'/', 
+            json = 
+                {
+                    'cliente_nome':request.form.get('cliente_nome'),
+                    'produto_nome':request.form.get('produto_nome'),
+                }            
+        )
+        return redirect(url_for("pedidos"))
+
+@app.route("/pedido/excluir/<pedido_id>/", methods=['GET'])
+def pedido_excluir(pedido_id):
+
+    requests.delete('http://localhost:5000/pedido/excluir/' + pedido_id + '/')
+   
+    # pedido = request.args.get('pedido')
+    # exclui um pedido
+    return redirect('pedidos')
+
 
 app.run(debug=True, port=4999)

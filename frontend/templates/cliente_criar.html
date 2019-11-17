@@ -1,32 +1,32 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Editar produto</title>
+  <title>Criar cliente</title>
 </head>
 
 <body>
 
-  <form action="/produto/editar/{{produto.id}}/" method="POST" style="flex: 1; display: flex; flex-direction: column; width: 40%; margin: 0 auto;">
+  <form action="/cliente/criar/" method="POST" style="flex: 1; display: flex; flex-direction: column; width: 40%; margin: 0 auto;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <label for="produto_nome">NOME</label>
-      <input type="text" name="produto_nome" id="produto_nome" value="{{produto.produto_nome}}">
+      <label for="cliente_nome">NOME</label>
+      <input type="text" name="cliente_nome" id="cliente_nome">
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <label for="produto_valor">VALOR</label>
-      <input type="text" name="produto_valor" id="produto_valor" value="{{produto.produto_valor}}">
+      <label for="cliente_endereco">ENDEREÇO</label>
+      <input type="text" name="cliente_endereco" id="cliente_endereco">
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <label for="produto_descricao">DESCRICAO</label>
-      <input type="text" name="produto_descricao" id="produto_descricao" value="{{produto.produto_descricao}}">
+      <label for="cliente_telefone">TELEFONE</label>
+      <input type="text" name="cliente_telefone" id="cliente_telefone">
     </div>
     
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <button type="">Voltar</button>
-      <button type="submit">Salvar</button>
+      <button type="submit">Cadastrar</button>
     </div>
     </form>
 </body>
