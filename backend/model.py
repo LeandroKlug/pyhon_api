@@ -25,8 +25,6 @@ class Pedido(BaseModel):
 if __name__ == "__main__":
     db.connect()
     db.create_tables([Cliente, Produto, Pedido])
-    joao = Cliente.create(nome="Joao da Silva", 
-        endereco="Casa 9", telefone="3541-1230")
-    print(joao.nome, ",", joao.endereco, ",", joao.telefone)
+    joao = Cliente.create(nome="Joao da Silva", endereco="Casa 9", telefone="3541-1230")
 
     
