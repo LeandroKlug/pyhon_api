@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Criar pedido</title>
+</head>
+
+<body>
+
+  <form action="/pedido/criar/" method="POST" style="flex: 1; display: flex; flex-direction: column; width: 40%; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <label for="pedido_cliente">NOME CLIENTE</label>
+      <!-- <input type="text" name="cliente_nome" id="cliente_nome"> -->
+      <select name="pedido_cliente">
+        {% for cliente in lista_clientes %}
+        <option value="{{cliente.id}}">{{cliente.cliente_nome}}</option>
+        {% else %}
+        <option value="">Não há clientes cadastrados.</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <label for="pedido_produto">PRODUTO</label>
+      <!-- <input type="text" name="cliente_endereco" id="cliente_endereco"> -->
+      <select name="pedido_produto">
+          {% for produto in lista_produtos %}
+          <option value="{{produto.id}}">{{produto.produto_nome}}</option>
+          {% else %}
+          <option value="">Não há produtos cadastrados.</option>
+          {% endfor %}
+      </select>
+    </div>
+    <!-- <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <label for="cliente_telefone">TELEFONE</label>
+      <input type="text" name="cliente_telefone" id="cliente_telefone">
+    </div> -->
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <button type="">Voltar</button>
+      <button type="submit">Cadastrar</button>
+    </div>
+    </form>
+</body>
+</html>

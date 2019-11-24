@@ -18,13 +18,10 @@ class Produto(BaseModel):
     produto_descricao = CharField()
 
 class Pedido(BaseModel):
-    cliente_nome = ForeignKeyField(Cliente)
-    prduto_nome = ForeignKeyField(Produto)   
+    pedido_cliente = ForeignKeyField(Cliente, backref='cliente')
+    pedido_produto = ForeignKeyField(Produto, backref='produto')   
 
 
 if __name__ == "__main__":
     db.connect()
     db.create_tables([Cliente, Produto, Pedido])
-    joao = Cliente.create(nome="Joao da Silva", endereco="Casa 9", telefone="3541-1230")
-
-    

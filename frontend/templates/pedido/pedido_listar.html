@@ -12,23 +12,21 @@
 
 <body>
     <a class="d-inline" href="/">Início</a>
-    <a class="d-inline" href="/cliente/criar/">Cadastrar pedidos</a>
+    <a class="d-inline" href="/pedido/criar/">Cadastrar pedidos</a>
   <table class="mx-auto">
     <thead>
-      <th>Pedido</th>
       <th>Cliente</th>
       <th>Produto</th>
       <th>Editar</th>
       <th>Excluir</th>
     </thead>
     <tbody>
-      {% for item in response %}
+      {% for pedido in lista_pedidos %}
       <tr>
-        <td>{{item.pedido_id}}</td>
-        <td>{{item.cliente_nome}}</td>
-        <td>{{item.prdotudo_nome}}</td>
-        <td><a href="/pedido/editar/{{item.id}}/">Editar</a></td>
-        <td><a href="/pedido/excluir/{{item.id}}/"> Excluir</a></td>
+        <td>{{pedido.pedido_cliente}}</td>
+        <td>{{pedido.pedido_produto}}</td>
+        <td><a href="/pedido/editar/{{pedido.id}}/">Editar</a></td>
+        <td><a href="/pedido/excluir/{{pedido.id}}/"> Excluir</a></td>
       </tr>
       {% endfor %}
     </tbody>

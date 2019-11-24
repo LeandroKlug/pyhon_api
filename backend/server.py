@@ -106,13 +106,14 @@ def cliente_editar(cliente_id):
         q = (Cliente
             .update(
                 {
-                    Cliente.cliente_id: info_frontend['cliente_nome'],
-                    Cliente.cliente_descricao: info_frontend['cliente_endereco'],
-                    Cliente.cliente_valor: info_frontend['cliente_telefone'],
+                    Cliente.cliente_nome: info_frontend['cliente_nome'],
+                    Cliente.cliente_endereco: info_frontend['cliente_endereco'],
+                    Cliente.cliente_telefone: info_frontend['cliente_telefone'],
                 }
             )
             .where(Cliente.id == cliente_id))
         q.execute() 
+
     return None
 
 @app.route("/cliente/excluir/<cliente_id>/", methods=['DELETE'])
@@ -132,7 +133,7 @@ def cliente_excluir(cliente_id):
 ##        ######## ########  #### ########   #######   ######  
 
 
-@app.route("/pedidos/", methods=['GET', 'POST'])
+@app.route("/pedido/", methods=['GET', 'POST'])
 def pedido():
     query = Pedido.select().dicts()
     itens = []
@@ -140,12 +141,14 @@ def pedido():
         itens.append(item)
 
     return jsonify(itens)
+    
 
 @app.route("/pedido/criar/", methods=['GET', 'POST'])
 def pedido_criar():
     Pedido.create(**request.get_json()).save()
-
+    
     return None
+
 
 @app.route("/pedido/editar/<pedido_id>/", methods=['GET', 'POST'])
 def pedido_editar(pedido_id):
@@ -164,8 +167,8 @@ def pedido_editar(pedido_id):
         q = (Pedido
             .update(
                 {
-                    Pedido.cliente_nome: info_frontend['cliente_nome'],
-                    Pedido.produto_nome: info_frontend['produto_nome'],
+                    Pedido.pedido_cliente: info_frontend['pedido_cliente'],
+                    Pedido.pedido_produto: info_frontend['pedido_produto'],
                 }
             )
             .where(Pedido.id == pedido_id))
